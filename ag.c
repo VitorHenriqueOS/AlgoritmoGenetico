@@ -3,10 +3,6 @@
 #include <string.h>
 #include "ag.h"
 
-
-
-
-
 Individuo* geraPopulacao(){
     Individuo *populacao = malloc(sizeof(Individuo) * POP);
 
@@ -84,6 +80,8 @@ void imprimeIndividuo(Individuo *ind){
         printf("%c ", ind->body[i]);
 
     printf("\n");
+    printf("Fitness: %d", ind->fitness);
+    printf("\n");
 }
 
 int particiona(Individuo *populacao, int low, int high) {
@@ -155,16 +153,6 @@ Individuo roleta(Individuo *populacao){
         }
     }
     return populacao[escolhido];
-}
-
-int tamanho(Individuo *populacao){
-    int count = 0;
-    for(int i = 0; i < POP; i++){
-        if(populacao[i].fitness != 0){
-            count++;
-        }
-    }
-    return count;
 }
 
 //======================================= Mutação =====================================

@@ -14,8 +14,6 @@ typedef struct {
     int fitness;
 } Individuo;
 
-int* AlgoritmoGenetico();
-
 Individuo criaIndividuo();
 Individuo* geraPopulacao();
 int fitness(Individuo *ind);
@@ -27,7 +25,6 @@ Individuo roleta(Individuo *populacao);
 void embaralha(Individuo *populacao);
 void troca(Individuo *ind, int pos1, int pos2);
 int contem(Individuo *ind, char letra, int limite);
-int tamanho(Individuo *populacao);
 
 
 void imprimeIndividuo(Individuo *ind);

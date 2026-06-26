@@ -128,37 +128,53 @@ Individuo* crossoverPMX(Individuo *pai1, Individuo *pai2){
 Individuo* crossoverCiclico(Individuo *pai1, Individuo *pai2){
     Individuo *filhos = malloc(sizeof(Individuo) * 2);
 
-    // Inicializa os filhos com -1 para identificar posições não preenchidas
+    // rastrear quais posições do cromossomo já foram preenchidas
+    int visitado[TAM];
     for(int i = 0; i < TAM; i++) {
+        visitado[i] = 0;
         filhos[0].body[i] = -1;
         filhos[1].body[i] = -1;
     }
 
-    // Copia o primeiro gene do pai1 para o filho1 e do pai2 para o filho2
-    filhos[0].body[0] = pai1->body[0];
-    filhos[1].body[0] = pai2->body[0];
+    int flag_pai = 0; // Qual pai copiar o ciclo atual
 
-    // Preenche os filhos com base no ciclo
     for(int i = 0; i < TAM; i++) {
-        if(filhos[0].body[i] == -1) {
-            int genePai2 = pai2->body[i];
-            int posicaoAlvo = -1;
+        if (!visitado[i]) {
+            int inicio = i;
+            int atual = i;
 
-            // Encontra a posição do gene do pai2 no pai1
-            for(int j = 0; j < TAM; j++) {
-                if(pai1->body[j] == genePai2) {
-                    posicaoAlvo = j;
-                    break;
+            // Rastreia e preenche todo o ciclo atual
+            do {
+                visitado[atual] = 1;
+
+                if (flag_pai == 0) {
+                    // Ciclo par: Filho 1 recebe do Pai 1, Filho 2 recebe do Pai 2
+                    filhos[0].body[atual] = pai1->body[atual];
+                    filhos[1].body[atual] = pai2->body[atual];
+                } else {
+                    // Ciclo ímpar: Inverte (Filho 1 recebe do Pai 2, Filho 2 recebe do Pai 1)
+                    filhos[0].body[atual] = pai2->body[atual];
+                    filhos[1].body[atual] = pai1->body[atual];
                 }
-            }
 
-            // Preenche o filho1 com o gene correspondente do pai2
-            filhos[0].body[i] = genePai2;
+                // Encontra o gene do Pai 2 no Pai 1 para continuar o ciclo
+                char geneAlvo = pai2->body[atual];
+                for(int j = 0; j < TAM; j++) {
+                    if(pai1->body[j] == geneAlvo) {
+                        atual = j;
+                        break;
+                    }
+                }
 
-            // Preenche o filho2 com o gene correspondente do pai1
-            filhos[1].body[i] = pai1->body[posicaoAlvo];
+            } while (atual != inicio);
+
+            // Alterna o pai para o próximo ciclo
+            flag_pai = !flag_pai;
         }
     }
+
+    filhos[0].fitness = 0;
+    filhos[1].fitness = 0;
 
     return filhos;
 }
