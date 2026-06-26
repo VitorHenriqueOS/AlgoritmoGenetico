@@ -23,8 +23,6 @@ int main() {
 		// Seleção de Pais
 		Individuo *selecionados = selecaoTorneioEstocastico(populacao, 3);
 
-
-
 		for(int j = 0; j < POP * TaxaCrossover; j+=2){
 			Individuo *filhosGerados = crossoverCiclico(&selecionados[j], &selecionados[j+1]);
 			filhos[j] = filhosGerados[0];
@@ -32,11 +30,21 @@ int main() {
 			free(filhosGerados);
 		}
 
+		// --- Mutação ---
+        for(int j = 0; j < qtd_filhos; j++) {
+            // Aplica a mutação baseado na taxa definida
+            if ((rand() % 100) < (TaxaMutacao * 100)) {
+                mutacao(&filhos[j]);
+            }
+        }
+
 		// calcula o fitness dos filhos
 		for(int j = 0; j < qtd_filhos; j++)
 			filhos[j].fitness = fitness(&filhos[j]);
 		
 		populacao = reinsercaoOrdenada(populacao, filhos, qtd_filhos);
+
+		free(selecionados);
 	}
 
 	quickSort(populacao, 0, POP - 1);
