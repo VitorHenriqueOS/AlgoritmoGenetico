@@ -12,12 +12,9 @@ int main() {
 
 	srand(time(NULL));
 	int qtd_filhos = POP * TaxaCrossover; // reinserção pura tamnho == POP
-	Individuo *populacao;
+	Individuo *populacao = geraPopulacao();
 	Individuo *filhos = malloc(qtd_filhos * sizeof(Individuo)); 
-	for(int i = 0; i < Geracoes; i++){
-
-		//gera a população inicial
-		populacao = geraPopulacao();
+	for(int i = 0; i < 10000; i++){
 		
 		// calcula o fitness dos individuos
 		for(int j = 0; j < POP; j++)
